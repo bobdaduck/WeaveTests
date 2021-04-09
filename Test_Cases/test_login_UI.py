@@ -22,8 +22,6 @@ class LoginTests(unittest.TestCase):
         self.Login.login(password_to_send="an incorrect password")
         assert self.Home.is_at() is False
 
-    def test_login_api(self):
-        
     def tearDown(self):
         self.driver.quit()
 
