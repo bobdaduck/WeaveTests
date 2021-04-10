@@ -22,8 +22,5 @@ class HomePage:
             return False
 
     def goto(self, url):
-        if isinstance(url, str):
-            # todo: if(Login.LoggedOut()): Login().login(), use a static method to not require instance of login
-            self.driver.find_element(*self.home_locator).click()
-        else:
-            raise TypeError("URL must be a string.")
+        # todo: if(Login.LoggedOut()): Login().login(), use a static method to not require instance of login
+        self.driver.find_element(*self.home_locator).click()
