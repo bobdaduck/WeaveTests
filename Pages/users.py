@@ -26,13 +26,14 @@ class Invitations:
     def get_invite_element(self):
         return find_element_by_class_then_text(self.driver, "css-tc6pfp", "Invitations")
 
+
 class UsersPage:
 
     def __init__(self, driver):
         self.driver = driver
         self.active_sidebar_locator = (By.CLASS_NAME, "css-12vigwj-SvgIcon")
         self.Invitations = Invitations(self.driver)
-        
+
     @staticmethod
     def get_accounts_sidebar_locator(driver):  # methods instead of properties keep code from automatically executing
         return find_element_by_class_then_text(driver, "css-rld5tt", "Account")
@@ -55,8 +56,6 @@ class UsersPage:
         self.get_accounts_sidebar_locator(self.driver).click()
         self.driver.find_element(*self.active_sidebar_locator)  # implicit wait is better than thread.sleep()
         self.get_users_locator(self.driver).click()
-
-
 
 
 class NewUserData:
@@ -103,8 +102,8 @@ class AddUsersPage:
         self.email_field = (By.ID, "email")
         self.firstname_locator = (By.CSS_SELECTOR, '[name="FirstName"]')
         self.lastname_locator = (By.CSS_SELECTOR, '[name="LastName"]')
-        #self.job_dropdown_locator = (By.ID, "cd583f")
-        #self.role_dropdown_locator = (By.ID, "2b60da")
+        # self.job_dropdown_locator = (By.ID, "cd583f")
+        # self.role_dropdown_locator = (By.ID, "2b60da")
         self.mobile_toggle_locator = (By.CSS_SELECTOR, '[name="MobileAccess"]')
         self.submit_locator = (By.CSS_SELECTOR, '[type="submit"]')
 
@@ -112,6 +111,7 @@ class AddUsersPage:
 
     def get_job_dropdown(self):  # these can be refactored to match the others it looks like.
         return self.driver.find_element(By.CSS_SELECTOR, '[name="JobTitles"]')
+
     def get_roles_dropdown(self):
         return self.driver.find_element(By.CSS_SELECTOR, '[name="Roles"]')
 
