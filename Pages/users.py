@@ -9,18 +9,30 @@ import time
 
 FIRST_NAMES = ["Aaron", "Alfred", "Arnold", "Albert", "Adrian"]
 LAST_NAMES = ["Smith", "Smythe", "Smitt", "Smitch", "Sith"]
-JOB_TITLES = ["Owner", "Front Desk", "Office Manager", "Doctor/Practicioner",
-              "Doctor/Practitioners Assistant (Hygienist, Dental/Opto/Other assistant, etc.)", "Back Office"]
-ROLES = ["Admin", "Advanced Team Member", "Payment Admin", "Payment - Data Exporting", "Payments - Refunds",
+JOB_TITLES = ["Owner", "Front Desk", "Office Manager", "Doctor/Practitioner",
+              "Doctor/Practitioners Assistant (Hygienist, Dental/Opto/Other assistant, etc.) ", "Back Office"]
+ROLES = ["Admin", "Advanced Team Member", "Payment Admin", "Payment - Data Exporting", "Payments - Refunds ",
          "Team Member"]
 
+
+class Invitations:
+
+    def __init__(self, driver):
+        self.driver = driver
+
+    def goto(self):
+        self.get_invite_element().click()
+
+    def get_invite_element(self):
+        return find_element_by_class_then_text(self.driver, "css-tc6pfp", "Invitations")
 
 class UsersPage:
 
     def __init__(self, driver):
         self.driver = driver
         self.active_sidebar_locator = (By.CLASS_NAME, "css-12vigwj-SvgIcon")
-
+        self.Invitations = Invitations(self.driver)
+        
     @staticmethod
     def get_accounts_sidebar_locator(driver):  # methods instead of properties keep code from automatically executing
         return find_element_by_class_then_text(driver, "css-rld5tt", "Account")
@@ -43,6 +55,8 @@ class UsersPage:
         self.get_accounts_sidebar_locator(self.driver).click()
         self.driver.find_element(*self.active_sidebar_locator)  # implicit wait is better than thread.sleep()
         self.get_users_locator(self.driver).click()
+
+
 
 
 class NewUserData:
@@ -75,8 +89,8 @@ class NewUserGenerator:
 
         user_data.roles = random.sample(ROLES, 3)
 
-        random_mobile_Access = random.randint(0, 1)  # python can cast 0 or 1 as bool
-        user_data.mobile_access = random_mobile_Access
+        random_mobile_access = random.randint(0, 1)  # python can cast 0 or 1 as bool
+        user_data.mobile_access = random_mobile_access
 
         return user_data
 
@@ -94,11 +108,12 @@ class AddUsersPage:
         self.mobile_toggle_locator = (By.CSS_SELECTOR, '[name="MobileAccess"]')
         self.submit_locator = (By.CSS_SELECTOR, '[type="submit"]')
 
-    def get_job_dropdown(self):
-        # return self.driver.find_elements_by_class_name("css-e61m0h-DropdownInput-MultiselectInput")[0]
+        # self.dropdown_owner_locator = (By.CSS_SELECTOR, '[data-value="Owner"]')
+
+    def get_job_dropdown(self):  # these can be refactored to match the others it looks like.
         return self.driver.find_element(By.CSS_SELECTOR, '[name="JobTitles"]')
     def get_roles_dropdown(self):
-        return self.driver.find_elements_by_class_name("css-e61m0h-DropdownInput-MultiselectInput")[1]
+        return self.driver.find_element(By.CSS_SELECTOR, '[name="Roles"]')
 
     def add_user(self, userdata=NewUserGenerator.newUser()):
         if not self.is_at():
@@ -112,18 +127,20 @@ class AddUsersPage:
         actions.move_to_element(self.get_job_dropdown())
         actions.click()
         actions.perform()
-        time.sleep(10)
-
-        self.driver.find_element(By.ID, "cd583f-Office Manager")
-        job_dropdown = Select(self.get_job_dropdown())
         for job in userdata.job_titles:
-            job_dropdown.select_by_value(job)
-        roles_dropdown = Select(self.get_roles_dropdown())
+            try_clicking_for_duration(self.driver.find_element(By.CSS_SELECTOR, '[data-value="{}"]'.format(job)), 4)
+
+        self.driver.find_element(By.CSS_SELECTOR, '[data-testid="user-invite-form"]').click()  # make dropdown go away
+        actions = ActionChains(self.driver)  # actionchains is necessary due to Weave's custom dropdown classes
+        actions.move_to_element(self.get_roles_dropdown())
+        actions.click()
+        actions.perform()
         for role in userdata.roles:
-            roles_dropdown.select_by_value(role)
+            try_clicking_for_duration(self.driver.find_element(By.CSS_SELECTOR, '[data-value="{}"]'.format(role)), 4)
+
         if userdata.mobile_access:
             self.driver.find_element(*self.mobile_toggle_locator).click()
-
+        self.driver.find_element(By.CSS_SELECTOR, '[data-testid="user-invite-form"]').click()  # make dropdown go away
         self.driver.find_element(*self.submit_locator).click()
 
     def is_at(self):
