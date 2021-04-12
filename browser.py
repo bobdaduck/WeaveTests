@@ -6,10 +6,10 @@ class Driver:
     def __init__(self):
 
         browserOptions = Options()
-        # browserOptions.add_argument("--headless")
+        browserOptions.add_argument("--headless")
 
         self.driver = webdriver.Chrome(options=browserOptions)
-        self.driver.implicitly_wait(7)
+        self.driver.implicitly_wait(10)
 
     def get_instance(self):
         return self.driver
