@@ -7,7 +7,7 @@ class Driver:
 
         browserOptions = Options()
         browserOptions.add_argument("--headless")
-
+        browserOptions.add_argument("--window-size=1440, 900") # reduces headless race conditions
         self.driver = webdriver.Chrome(options=browserOptions)
         self.driver.implicitly_wait(10)
 

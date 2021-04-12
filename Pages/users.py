@@ -5,6 +5,7 @@ import random
 from Pages.helpers import find_element_by_class_then_text
 from Pages.helpers import try_clicking_for_duration
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 import time
 
 FIRST_NAMES = ["Aaron", "Alfred", "Arnold", "Albert", "Adrian"]
@@ -123,24 +124,36 @@ class AddUsersPage:
         try_clicking_for_duration(self.driver.find_element(*self.submit_locator), 5)
         self.driver.find_element(*self.firstname_locator).send_keys(userdata.first_name)
         self.driver.find_element(*self.lastname_locator).send_keys(userdata.last_name)
+
         actions = ActionChains(self.driver)  # actionchains is necessary due to Weave's custom dropdown classes
         actions.move_to_element(self.get_job_dropdown())
         actions.click()
         actions.perform()
+
         for job in userdata.job_titles:
             try_clicking_for_duration(self.driver.find_element(By.CSS_SELECTOR, '[data-value="{}"]'.format(job)), 4)
 
-        self.driver.find_element(By.CSS_SELECTOR, '[data-testid="user-invite-form"]').click()  # make dropdown go away
+        actions = ActionChains(self.driver)
+        actions.send_keys(Keys.ESCAPE)
+        actions.perform()  # make dropdown go away
+
         actions = ActionChains(self.driver)  # actionchains is necessary due to Weave's custom dropdown classes
         actions.move_to_element(self.get_roles_dropdown())
         actions.click()
         actions.perform()
+
         for role in userdata.roles:
             try_clicking_for_duration(self.driver.find_element(By.CSS_SELECTOR, '[data-value="{}"]'.format(role)), 4)
 
+        actions = ActionChains(self.driver)
+        actions.send_keys(Keys.ESCAPE)
+        actions.perform()
+
         if userdata.mobile_access:
             self.driver.find_element(*self.mobile_toggle_locator).click()
-        self.driver.find_element(By.CSS_SELECTOR, '[data-testid="user-invite-form"]').click()  # make dropdown go away
+
+        time.sleep(10)
+        # self.driver.find_element(By.CSS_SELECTOR, '[data-testid="user-invite-form"]').click()  # make dropdown go away
         self.driver.find_element(*self.submit_locator).click()
 
     def is_at(self):
