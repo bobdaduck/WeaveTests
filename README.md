@@ -21,7 +21,7 @@ or individually, by running
 ```pip install pytest-xdist```
 
 
-It is advised to create a virtual environment first, which causes the packages installed by pip to be installed only for python running within the virtual environment, rather than be installed at the system level, but this is not strictly necessary. 
+It is advised to create a virtual environment first, which causes the packages installed by pip to be installed only for python running within the virtual environment, rather than be installed at the system level, but this is not strictly necessary.  https://docs.python.org/3/library/venv.html
 
 
 ## Explanation of packages used
