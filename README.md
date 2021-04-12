@@ -13,10 +13,10 @@ You must install the requirements from the requirements.txt file, which can be d
 ```pip install -r requirements.txt```
 
 or individually, by running 
-```pip install pytest
-pip install pytest-html
-pip install selenium
-pip install requests```
+```pip install pytest```
+```pip install pytest-html```
+```pip install selenium```
+```pip install requests```
 
 
 It is advised to create a virtual environment first, which causes the packages installed by pip to be installed only for python running within the virtual environment, rather than be installed at the system level, but this is not strictly necessary. 
