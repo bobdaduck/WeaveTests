@@ -4,7 +4,7 @@ Run tests by pytest from the repository's root directory specifying the "Test_ca
 
 ```"pytest Test_Cases --html="results.html"```.
 
-To run in parallel, just add -n <number of parallel tests to run> to the end of the command. 
+To run in parallel, just add -n and the number of parallel tests to run to the end of the command. 
 
 ## SETUP
 To setup, you must install the chromedriver version for your operating system into the root folder. Chromedriver can be downloaded from https://chromedriver.chromium.org/downloads for any operating system, but you must download the version of chromedriver that matches the version of google chrome installed on your computer (found on chrome's about page). You may also need to add `chromedriver` to your `PATH`: https://www.howtogeek.com/658904/how-to-add-a-directory-to-your-path-in-linux/
