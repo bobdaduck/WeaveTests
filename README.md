@@ -2,7 +2,7 @@
 
 Run tests by pytest from the repository's root directory specifying the "Test_cases" directory: `
 
-``"pytest Test_Cases --html="results.html"```.
+```"pytest Test_Cases --html="results.html"```.
 
 
 ## SETUP
