@@ -25,8 +25,11 @@ It is advised to create a virtual environment first, which causes the packages i
 ## Explanation of packages used
 
 Pytest is a popular python test runner
+
 Pytest-html generates a report html file which can then be emailed or consumed with test failures, stack traces, and successes.
+
 Selenium is a browser automation framework
+
 Requests is python's standard library for REST requests.
 
 
