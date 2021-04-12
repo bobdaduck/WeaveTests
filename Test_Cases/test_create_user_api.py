@@ -3,12 +3,13 @@ import requests
 from Pages.variables import EMAIL
 from Pages.variables import PASSWORD
 from Pages.variables import JWT_TOKEN
-
+from Pages.variables import EMAIL_FOR_GENERATOR
+import random
 
 class InviteTests(unittest.TestCase):
 
     def setUp(self):
-        self.login_url = "https://api.weaveconnect.com/portal/v1/users/inviteUser"
+        self.invite_url = "https://api.weaveconnect.com/portal/v1/users/inviteUser"
 
         """"  # headers info from devtools
         authority: api.weaveconnect.com
@@ -31,31 +32,54 @@ class InviteTests(unittest.TestCase):
         user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36
         """
 
+        """Email: "bobdaduck63+2@gmail.com", FirstName: "API", LastName: "checker", MobileNumber: "",…}
+        Email: "bobdaduck63+2@gmail.com"
+        FirstName: "API"
+        JobTitles: ["0eed809e-f27f-47b4-ab99-569b1f013638", "0eed809e-f27f-47b4-ab99-569b1f013639"]
+        LastName: "checker"
+        MobileNumber: ""
+        Roles: [15, 22, 12]
+        0: 15
+        1: 22
+        2: 12"""
+
+
     def test_invite_API(self):
+        email_random_number = random.randint(0, 1000)
+        random_email = EMAIL_FOR_GENERATOR.replace('{rnd}', str(email_random_number))
         headers = {
                 "Authorization": "Bearer {}".format(JWT_TOKEN),
-                "Location-Id": "",
+                "Location-Id": "feeda0e8-0de3-419e-ae09-865b6b6f09b9",
                 "content-type": "application/json",
                 }
 
-        data = {"username": EMAIL,
-                "password": PASSWORD}
+        data = {"Email": random_email,
+        "FirstName": "API" + str(email_random_number),
+        "JobTitles": ["0eed809e-f27f-47b4-ab99-569b1f013638", "0eed809e-f27f-47b4-ab99-569b1f013639"],
+        "LastName": "test_invite",
+        "MobileNumber": "",
+        "Roles": [15, 22, 12]}
 
-        response = requests.post(self.login_url, headers=headers, json=data)
+        response = requests.post(self.invite_url, headers=headers, json=data)
         assert response.status_code == 200
 
     def test_invite_API_bad(self):
         headers = {
-                "Authorization": "Bearer {}".format(JWT_TOKEN),
-                "Location-Id": "",
-                "content-type": "application/json",
-                }
+            "Authorization": "Bearer {}".format(JWT_TOKEN),
+            "Location-Id": "feeda0e8-0de3-419e-ae09-865b6b6f09b9",
+            "content-type": "application/json",
+        }
 
-        data = {"username": "bad_email@yahoo.com",
-                "password": "bad_password"}
+        data = {"Email": "a bad email",
+                "FirstName": "API",
+                "JobTitles": ["0eed809e-f27f-47b4-ab99-569b1f013638", "0eed809e-f27f-47b4-ab99-569b1f013639"],
+                "LastName": "test_bad_invite",
+                "MobileNumber": "",
+                "Roles": [15, 22, 12]}
 
-        response = requests.post(self.login_url, headers=headers, json=data)
-        assert response.status_code == 401
+        response = requests.post(self.invite_url, headers=headers, json=data)
+        assert response.status_code == 500
+        assert response.text == "{\"error\":\"Failed to Send Invite User Email\"}"
 
     def tearDown(self):
         pass
